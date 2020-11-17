@@ -1,0 +1,350 @@
+<template>
+  <div class="gallery">
+    <div
+      class="gallery__body"
+      v-bind:class="{ visible: opacity, invisible: !opacity }"
+    >
+      <h2
+        class="gallery__body--h2"
+        v-bind:class="{
+          isActive: current > 0,
+        }"
+      >
+        {{ currentContent.name }}
+      </h2>
+      <div class="gallery__body--slide">
+        <figure
+          v-for="(item, index) in slideItems"
+          :key="index"
+          v-bind:class="{
+            isActive: item.id === current,
+            isInActive: item.id !== current,
+            isRight: item.id > current,
+            isRightTwo: item.id > current + 1,
+            isLeft: item.id < current,
+            isLeftTwo: item.id < current - 1,
+            invisible: item.id < current - 2 || item.id > current + 2,
+            clickable: item.id === current + 1 || item.id === current - 1,
+          }"
+          @click="set_current(item.id)"
+        >
+          <img :src="item.image" alt="" />
+        </figure>
+      </div>
+      <div class="gallery__body--nav">
+        <span @click="toggle_section('left')">
+          <svg class="gallery__body--svg">
+            <use xlink:href="~assets/sprite.svg#icon-play_arrow" />
+          </svg>
+        </span>
+        <span @click="toggle_section('right')">
+          <svg class="gallery__body--svg">
+            <use xlink:href="~assets/sprite.svg#icon-play_arrow" />
+          </svg>
+        </span>
+      </div>
+    </div>
+
+    <div class="gallery__body--mobile" id="gallery__body--mobile">
+      <div class="gallery__body--mobilewrapper">
+        <figure
+          v-for="(item, index) in slideItems"
+          :key="'mobileslide' + index"
+          v-bind:class="{
+            left: item.id < current,
+            right: item.id > current,
+            inactive: item.id !== current,
+            clickable: item.id === current + 1 || item.id === current - 1,
+          }"
+          @click="set_current(item.id)"
+        >
+          <img :src="item.image" alt="" />
+        </figure>
+      </div>
+      <div class="gallery__body--nav">
+        <span @click="toggle_section('left')">
+          <svg class="gallery__body--svg">
+            <use xlink:href="~assets/sprite.svg#icon-play_arrow" />
+          </svg>
+        </span>
+        <span @click="toggle_section('right')">
+          <svg class="gallery__body--svg">
+            <use xlink:href="~assets/sprite.svg#icon-play_arrow" />
+          </svg>
+        </span>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+import HomeJumbotron from "@/components/HomeJumbotron";
+import Brands from "@/components/Brands";
+
+export default {
+  components: {
+    HomeJumbotron,
+    Brands,
+  },
+  data() {
+    return {
+      opacity: true,
+      current: 0,
+    };
+  },
+  mounted() {
+    import("pure-swipe-js").then((result) => {
+      //console.log(result);
+
+      const swiper = document.getElementById("gallery__body--mobile");
+
+        swiper.addEventListener("swipe.end", (event) => {
+            if (event.detail.direction % 2 !== 0) {
+                this.current === this.slideItems.length - 1 ?
+                    "" :
+                    (this.current = this.current + 1);
+            } else {
+                this.current === 0 ? "" : (this.current = this.current - 1);
+            }
+        });
+    });
+  },
+  watch: {
+    currentRoute(new_val, old_val) {
+      this.opacity = false;
+      setTimeout(() => {
+        this.$router.push("/");
+      }, 400);
+    },
+  },
+  computed: {
+    currentContent() {
+      const current_content = this.$store.getters.current_content;
+      return current_content;
+    },
+    currentRoute() {
+      const current_route = this.$store.getters.current_route;
+      return current_route;
+    },
+    slideItems() {
+      const slide_items = this.$store.getters.slide_items;
+      return slide_items;
+    },
+  },
+  methods: {
+    toggle_section(direction) {
+      if (direction === "right") {
+        this.current === this.slideItems.length - 1
+          ? ""
+          : (this.current = this.current + 1);
+      } else {
+        this.current === 0 ? "" : (this.current = this.current - 1);
+      }
+    },
+    set_current(val) {
+      this.current = val;
+    },
+  },
+};
+</script>
+
+<style lang="scss" scoped>
+.gallery {
+  margin-top: 8rem;
+  color: #fff;
+  padding: 0 2rem;
+  animation: appear 0.7s ease-out;
+
+  &__body {
+    position: relative;
+    display: flex;
+    align-items: center;
+    height: 70rem;
+    transition: all 0.3s ease-in;
+
+    @include respond(tab-land) {
+      display: none;
+    }
+
+    &.visible {
+      opacity: 1;
+    }
+
+    &.invisible {
+      opacity: 0;
+    }
+
+    &--h2 {
+      text-transform: uppercase;
+      font-size: 7rem;
+      flex-shrink: 0;
+      transition: all 0.7s ease-out;
+
+      &.isActive {
+        transform: translateX(-55rem);
+        opacity: 0;
+      }
+    }
+
+    &--nav {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100vw;
+      height: 8rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      @include respond(tab-land) {
+        bottom: -2rem;
+      }
+
+      & span {
+        display: inline-block;
+        cursor: pointer;
+
+        @include respond(tab-land) {
+          margin: 0 1rem;
+        }
+
+        &:nth-child(1) {
+          transform: rotate(180deg) translateY(0.3rem);
+        }
+      }
+    }
+
+    &--slide {
+      display: flex;
+      align-items: center;
+      position: relative;
+      perspective: 150rem;
+
+      width: 34rem;
+
+      & figure {
+        cursor: pointer;
+        flex-shrink: 0;
+        width: 30rem;
+        height: 43rem;
+        margin: 0 2rem;
+        background: #000000;
+        position: absolute;
+        transition: all 0.7s ease-out;
+
+        &.isLeft {
+          left: -37rem;
+          animation: slideLeft 0.7s ease-out;
+        }
+
+        &.isLeftTwo {
+          transform: translateX(-37rem);
+          animation: slideLeftTwo 0.7s ease-out;
+        }
+
+        &.isActive {
+          height: 54rem;
+          width: 41rem;
+          animation: slideLeft 0.7s ease-out;
+          left: 0;
+        }
+
+        &.isRight {
+          right: -47rem;
+          animation: slideRightInActive 0.7s ease-out;
+        }
+
+        &.isRightTwo {
+          transform: translateX(37rem);
+          animation: slideRight 0.7s ease-out;
+        }
+
+        &.isInActive {
+          opacity: 0.8;
+          box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+
+          -webkit-filter: blur(0.4rem);
+          -moz-filter: blur(0.4rem);
+          -o-filter: blur(0.4rem);
+          -ms-filter: blur(0.4rem);
+          filter: blur(0.4rem);
+        }
+
+        &.invisible {
+          opacity: 0;
+          animation: invisible 0.7s ease-out;
+        }
+
+        &.clickable {
+          z-index: 3;
+        }
+      }
+    }
+
+    &--svg {
+      fill: #c4c4c4;
+      height: 4rem;
+      width: 4rem;
+
+      @include respond(tab-land) {
+        height: 6rem;
+        width: 6rem;
+      }
+    }
+
+    &--mobile {
+      display: none;
+      height: 75rem;
+      position: relative;
+      justify-content: center;
+      align-items: center;
+
+      @include respond(tab-land) {
+        display: flex;
+      }
+    }
+
+    &--mobilewrapper {
+      position: relative;
+      height: 58rem;
+      flex-shrink: 0;
+      width: 42rem;
+
+      & figure {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 42rem;
+        height: 100%;
+        z-index: 2;
+        transition: all 0.3s ease-in;
+
+        &.clickable {
+          z-index: 3;
+        }
+
+        &.inactive {
+          opacity: 0.8;
+          box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+
+          -webkit-filter: blur(0.4rem);
+          -moz-filter: blur(0.4rem);
+          -o-filter: blur(0.4rem);
+          -ms-filter: blur(0.4rem);
+          filter: blur(0.4rem);
+        }
+
+        &.left {
+          left: -40rem;
+          transform: scale(0.8);
+        }
+
+        &.right {
+          left: 40rem;
+          transform: scale(0.8);
+        }
+      }
+    }
+  }
+}
+</style>
