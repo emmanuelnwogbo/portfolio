@@ -28,7 +28,10 @@
           }"
           @click="set_current(item.id)"
         >
-          <img :src="item.image" alt="" />
+          <img
+            :src="`https://advertising-samson.s3.eu-west-2.amazonaws.com/${item.Key}`"
+            alt=""
+          />
         </figure>
       </div>
       <div class="gallery__body--nav">
@@ -58,7 +61,7 @@
           }"
           @click="set_current(item.id)"
         >
-          <img :src="item.image" alt="" />
+          <img :src="`https://advertising-samson.s3.eu-west-2.amazonaws.com/${item.Key}`" alt="" />
         </figure>
       </div>
       <div class="gallery__body--nav">
@@ -94,19 +97,17 @@ export default {
   },
   mounted() {
     import("pure-swipe-js").then((result) => {
-      //console.log(result);
-
       const swiper = document.getElementById("gallery__body--mobile");
 
-        swiper.addEventListener("swipe.end", (event) => {
-            if (event.detail.direction % 2 !== 0) {
-                this.current === this.slideItems.length - 1 ?
-                    "" :
-                    (this.current = this.current + 1);
-            } else {
-                this.current === 0 ? "" : (this.current = this.current - 1);
-            }
-        });
+      swiper.addEventListener("swipe.end", (event) => {
+        if (event.detail.direction % 2 !== 0) {
+          this.current === this.slideItems.length - 1
+            ? ""
+            : (this.current = this.current + 1);
+        } else {
+          this.current === 0 ? "" : (this.current = this.current - 1);
+        }
+      });
     });
   },
   watch: {
@@ -127,8 +128,21 @@ export default {
       return current_route;
     },
     slideItems() {
-      const slide_items = this.$store.getters.slide_items;
-      return slide_items;
+      let slide_items;
+      const current_content = this.$store.getters.current_content;
+
+      if (current_content.name === "advertising") {
+        slide_items = this.$store.getters.advertising_items;
+      } else if (current_content.name === "photography") {
+        slide_items = this.$store.getters.photography_items;
+      }
+
+      const imgs = slide_items.filter((item) => item.Size !== 0);
+      imgs.forEach((item, index) => {
+        item.id = index;
+      });
+
+      return imgs;
     },
   },
   methods: {
@@ -318,6 +332,10 @@ export default {
         height: 100%;
         z-index: 2;
         transition: all 0.3s ease-in;
+
+        & img {
+          object-fit: contain !important;
+        }
 
         &.clickable {
           z-index: 3;

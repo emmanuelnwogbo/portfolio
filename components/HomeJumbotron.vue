@@ -175,11 +175,10 @@ export default {
     this.loaded = true;
 
     import("pure-swipe-js").then((result) => {
-      //console.log(result);
-
       const swiper = document.getElementById("homejumbotron__mobile");
 
       swiper.addEventListener("swipe.end", (event) => {
+        console.log(event);
         if (event.detail.direction % 2 !== 0) {
           this.current_section_handler === this.sections.length - 1
             ? ""
@@ -436,14 +435,13 @@ export default {
 
   &__btn {
     position: absolute;
-    bottom: 3rem;
+    bottom: 8rem;
     left: 0;
     width: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 5rem;
-
+    height: 1rem;
     z-index: 9;
 
     @include respond(tab-land) {
