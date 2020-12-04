@@ -4,7 +4,7 @@
       opacity: currentSection > 0 ? `0` : `1`,
     }">
     <figure class="intro__img">
-        <img src="https://images.unsplash.com/photo-1508431640151-f2217ef26c31?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="" />
+        <img src="~assets/samson.png" alt="" />
     </figure>
     <div class="intro__bio">
         <p>
