@@ -16,7 +16,10 @@
       >
         <div class="homejumbotron__intro--img">
           <figure>
-            <img src="~assets/samson.png" alt="" />
+            <v-lazy-image
+              :src="'~assets/samson.png'"
+              src-placeholder="https://res.cloudinary.com/dnsj71rid/image/upload/c_scale,q_10,w_378/v1602546774/VI2A6028_pregqc.jpg"
+            />
           </figure>
         </div>
         <div class="homejumbotron__intro--bio">
@@ -42,7 +45,10 @@
               current: item.id === current_section,
             }"
           >
-            <img :src="item.photo" alt="" />
+            <v-lazy-image
+              :src="item.photo"
+              src-placeholder="https://res.cloudinary.com/dnsj71rid/image/upload/c_scale,q_10,w_378/v1602546774/VI2A6028_pregqc.jpg"
+            />
           </figure>
           <h2
             class="homejumbotron__section--label"
@@ -104,6 +110,8 @@ import StaticPhoto from "@/components/mobile/StaticPhoto";
 
 import { TimelineLite } from "gsap";
 
+import VLazyImage from "v-lazy-image";
+
 export default {
   name: "HomeJumbotron",
   components: {
@@ -115,6 +123,7 @@ export default {
     MobileIntro,
     MobileSlidePhoto,
     StaticPhoto,
+    VLazyImage,
   },
   data() {
     return {

@@ -28,10 +28,9 @@
           }"
           @click="set_current(item.id)"
         >
-          <img
-            v-if="item.id <= limit"
+          <v-lazy-image
             :src="`https://advertising-samson.s3.eu-west-2.amazonaws.com/${item.Key}`"
-            alt=""
+            src-placeholder="https://res.cloudinary.com/dnsj71rid/image/upload/c_scale,q_10,w_378/v1602546774/VI2A6028_pregqc.jpg"
           />
         </figure>
       </div>
@@ -61,13 +60,7 @@
             clickable: item.id === current + 1 || item.id === current - 1,
           }"
           @click="set_current(item.id)"
-        >
-          <img
-            v-if="item.id <= limit"
-            :src="`https://advertising-samson.s3.eu-west-2.amazonaws.com/${item.Key}`"
-            alt=""
-          />
-        </figure>
+        ></figure>
       </div>
       <div class="gallery__body--nav">
         <span @click="toggle_section('left')">
@@ -88,10 +81,16 @@
 <script>
 import HomeJumbotron from "@/components/HomeJumbotron";
 import Brands from "@/components/Brands";
+
+import LazyImage from "@/components/LazyImage";
+//import VueLoadImage from "vue-load-image";
+import VLazyImage from "v-lazy-image";
 export default {
   components: {
     HomeJumbotron,
     Brands,
+    //"vue-load-image": null,
+    VLazyImage
   },
   data() {
     return {
@@ -101,6 +100,10 @@ export default {
     };
   },
   mounted() {
+    import("vue-load-image").then((result) => {
+      console.log(result.default);
+    });
+
     import("pure-swipe-js").then((result) => {
       //console.log(result);
       const swiper = document.getElementById("gallery__body--mobile");

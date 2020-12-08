@@ -21,7 +21,10 @@
       }"
     >
       <figure class="blurredcardright__section--img">
-        <img :src="section.photo" alt="" />
+        <v-lazy-image
+          :src="section.photo"
+          src-placeholder="https://res.cloudinary.com/dnsj71rid/image/upload/c_scale,q_10,w_378/v1602546774/VI2A6028_pregqc.jpg"
+        />
       </figure>
       <h2 class="blurredcardright__section--label">
         {{ section.name }}
@@ -31,6 +34,8 @@
 </template>
 
 <script>
+import VLazyImage from "v-lazy-image";
+
 export default {
   name: "BlurredCardRight",
   props: {
@@ -38,6 +43,9 @@ export default {
     sections: Array,
     current_section: Number,
   },
+  components: {
+    VLazyImage
+  }
 };
 </script>
 
