@@ -1,133 +1,88 @@
 <template>
-  <div>
-    <div
-      class="homejumbotron homejumbotron__desktop"
-      v-bind:class="{
-        notshown: !loaded,
-      }"
-    >
-      <div
-        class="blurredcards"
-        v-if="blurredCardLeft.length > 1"
-        v-bind:style="{
-          transform: `translateX(-9rem)`,
-        }"
-      >
-        <figure class="blurredcards__photo">
-          <img
-            :src="blurredCardLeft[blurredCardLeft.length - 2].photo"
-            alt=""
-          />
-        </figure>
-      </div>
+  <div class="homejumbotron">
+    <div class="homejumbotron__body">
       <BlurredCardsLeft
-        v-for="(item, index) in blurredCardLeft"
-        :key="'blurredcardsleft' + index"
-        v-bind:section="item"
-        v-bind:translates="translates"
-        v-bind:currentSection="current_section"
-        v-bind:click_current="click_current"
-      />
-      <Intro v-bind:currentSection="current_section" />
-      <div
-        class="homejumbotron__labels"
         v-for="(item, index) in sections"
-        :key="'homejumbotronlabels' + index"
+        :key="'isactiveleft' + index"
+        v-bind:section="item"
+        v-bind:current_section="current_section"
+        v-bind:sections="sections"
+      />
+      <div
+        class="homejumbotron__intro"
         v-bind:class="{
-          isActive: item.id === current_section,
-          isNotActive: item.id !== current_section,
+          moved: current_section !== 0,
         }"
       >
-        <h2 class="homejumbotron__labels--h2">{{ item.name }}</h2>
-        <button class="homejumbotron__labels--btn" @click="view">browse</button>
-      </div>
-      <div class="homejumbotron__homecards">
-        <HomeCard
-          v-for="(item, index) in sections"
-          :key="'homecard' + index"
-          v-bind:section="item"
-          v-bind:currentSection="current_section"
-        />
-        <div class="homejumbotron__static">
-          <figure class="homejumbotron__static--photo">
-            <img
-              :src="item.photo"
-              alt=""
-              v-for="(item, index) in sections"
-              :key="'staticimg' + index"
-              v-bind:class="{
-                isActive: item.id === current_section,
-              }"
-            />
+        <div class="homejumbotron__intro--img">
+          <figure>
+            <img src="~assets/samson.png" alt="" />
           </figure>
         </div>
+        <div class="homejumbotron__intro--bio">
+          <p>
+            Samson adebayo is a multidisciplined creative. Samson loves to refer
+            to himself as a visual artist as his proefficiency cuts across
+            various art field from Art direction to copywriting, product design,
+            photography and cinematography.
+          </p>
+        </div>
+        <div class="homejumbotron__intro--btn">
+          <button>see resume</button>
+        </div>
       </div>
-      <BlurredCards
-        v-for="(item, index) in blurredCardData"
-        :key="'blurredcards' + index"
-        v-bind:section="item"
-        v-bind:translates="translates"
-        v-bind:currentSection="current_section"
-        v-bind:position="index"
-        v-bind:lengthOfBlurred="blurredCardData.length"
-        v-bind:click_current="click_current"
-      />
-      <div class="homejumbotron__btn">
-        <span @click="toggle_section('left')">
-          <svg class="homejumbotron__svg">
-            <use xlink:href="~assets/sprite.svg#icon-play_arrow" />
-          </svg>
-        </span>
-        <span @click="toggle_section('right')">
-          <svg class="homejumbotron__svg">
-            <use xlink:href="~assets/sprite.svg#icon-play_arrow" />
-          </svg>
-        </span>
-      </div>
-    </div>
+      <div class="homejumbotron__slide">
+        <div class="homejumbotron__section activeSection">
+          <figure
+            class="homejumbotron__section--img"
+            v-for="(item, index) in sections"
+            :key="'sectionsin' + index"
+            v-bind:class="{
+              incurrent: item.id !== current_section,
+              current: item.id === current_section,
+            }"
+          >
+            <img :src="item.photo" alt="" />
+          </figure>
+          <h2
+            class="homejumbotron__section--label"
+            v-for="(item, index) in sections"
+            :key="'sections' + index"
+            v-bind:class="{
+              incurrent: item.id !== current_section,
+              current: item.id === current_section,
+            }"
+          >
+            {{ item.name }}
+          </h2>
+          <div class="homejumbotron__section--btnarea">
+            <button @click="open_route(current_section)">Browse</button>
+          </div>
+        </div>
 
-    <div class="homejumbotron homejumbotron__mobile" id="homejumbotron__mobile">
-      <MobileIntro
-        v-bind:mobileIntro="mobileIntro"
-        v-bind:viewportfolio="viewportfolio"
-      />
-      <div class="homejumbotron__mobile--portfolio">
-        <MobileSlidePhoto
+        <BlurredCardRight
           v-for="(item, index) in sections"
-          :key="'mobileslidephoto' + index"
+          :key="'isactiveright' + index"
           v-bind:section="item"
-          v-bind:currentSection="current_section"
-          v-bind:mobileIntro="mobileIntro"
-        />
-        <StaticPhoto
+          v-bind:current_section="current_section"
           v-bind:sections="sections"
-          v-bind:currentSection="current_section"
-          v-bind:mobileIntro="mobileIntro"
         />
       </div>
-      <div class="homejumbotron__btn">
-        <span @click="toggle_section('left')">
+
+      <div class="homejumbotron__navi">
+        <span class="homejumbotron__navi--left" @click="toggle_section('left')">
           <svg class="homejumbotron__svg">
             <use xlink:href="~assets/sprite.svg#icon-play_arrow" />
           </svg>
         </span>
-        <span @click="toggle_section('right')">
+        <span
+          class="homejumbotron__navi--right"
+          @click="toggle_section('right')"
+        >
           <svg class="homejumbotron__svg">
             <use xlink:href="~assets/sprite.svg#icon-play_arrow" />
           </svg>
         </span>
-      </div>
-      <div
-        class="homejumbotron__labels"
-        v-for="(item, index) in sections"
-        :key="'homejumbotronlabels' + index"
-        v-bind:class="{
-          isActive: item.id === current_section,
-          isNotActive: item.id !== current_section,
-        }"
-      >
-        <h2 class="homejumbotron__labels--h2">{{ item.name }}</h2>
-        <button class="homejumbotron__labels--btn" @click="view">browse</button>
       </div>
     </div>
   </div>
@@ -138,6 +93,8 @@ import HomeCard from "@/components/HomeCard";
 import BlurredCards from "@/components/BlurredCards";
 import BlurredCardsLeft from "@/components/BlurredCardsLeft";
 import Intro from "@/components/Intro";
+
+import BlurredCardRight from "@/components/BlurredCardRight";
 
 import homeJumbotron from "@/mixins/home_jumbotron.js";
 
@@ -152,6 +109,7 @@ export default {
   components: {
     HomeCard,
     Intro,
+    BlurredCardRight,
     BlurredCardsLeft,
     BlurredCards,
     MobileIntro,
@@ -164,6 +122,7 @@ export default {
       current_section: 0,
       current_section_handler: 0,
       loaded: false,
+      right_section: 1,
       translates: {
         translateA: 0,
         translateB: 20,
@@ -192,6 +151,7 @@ export default {
     });
   },
   watch: {
+    current_section(new_val, old_val) {},
     blurredCardData(new_val, old_val) {
       setTimeout(() => {}, 1000);
     },
@@ -204,6 +164,15 @@ export default {
     },
   },
   computed: {
+    inActiveRight: {
+      get: function () {
+        const data = this.sections.filter(
+          (item) => item.id > this.current_section
+        );
+
+        return this.sections;
+      },
+    },
     blurredCardData: {
       get: function () {
         const data = this.sections.filter(
@@ -234,14 +203,13 @@ export default {
   },
   methods: {
     toggle_section(direction) {
-      if (direction === "right") {
-        this.current_section_handler === this.sections.length - 1
-          ? ""
-          : (this.current_section_handler = this.current_section_handler + 1);
-      } else {
-        this.current_section_handler === 0
-          ? (this.mobileIntro = true)
-          : (this.current_section_handler = this.current_section_handler - 1);
+      if (
+        direction === "right" &&
+        this.current_section !== this.sections.length - 1
+      ) {
+        this.current_section = this.current_section + 1;
+      } else if (direction === "left" && this.current_section !== 0) {
+        this.current_section = this.current_section - 1;
       }
     },
     view() {
@@ -258,6 +226,11 @@ export default {
     click_current(val) {
       this.current_section_handler = val;
     },
+
+    open_route(route_id) {
+      const route = this.sections[route_id].route;
+      this.$router.push("/" + route);
+    },
   },
   mixins: [homeJumbotron],
 };
@@ -265,16 +238,236 @@ export default {
 
 <style lang="scss" scoped>
 .homejumbotron {
+  height: 68rem;
   background: #141414;
-  height: 73rem;
-  display: flex;
-  align-items: center;
-  color: #fff;
+  margin-bottom: 1.5rem;
   margin-top: 8rem;
-  margin-bottom: 3rem;
-  overflow: hidden;
-  position: relative;
-  animation: appear 0.5s ease-out;
+  padding: 2rem;
+  color: #fff;
+  padding-bottom: 0rem;
+
+  &__body {
+    position: relative;
+    height: 100%;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  &__intro {
+    position: relative;
+    width: 50rem;
+    height: 95%;
+    margin-top: 3rem;
+    transition: $transition-primary;
+
+    &.moved {
+      transform: translateX(30rem);
+      opacity: 0;
+    }
+
+    &::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      right: 0;
+      background: #c4c4c4;
+      width: 0.5px;
+      height: 63rem;
+      transform: translateY(-4rem);
+    }
+
+    &--img {
+      overflow: hidden;
+      height: 17rem;
+      width: 17rem;
+      border-radius: 1.4rem;
+    }
+
+    &--bio {
+      font-size: 1.88rem;
+      margin-top: 3rem;
+      width: 41rem;
+    }
+
+    &--btn {
+      margin-top: 3.5rem;
+
+      & button {
+        outline: none;
+        border: 1px solid #fff;
+        color: #fff;
+        background: transparent;
+        text-transform: uppercase;
+        font-size: 1.5rem;
+        height: 3.5rem;
+        width: 17rem;
+        text-align: center;
+        cursor: pointer;
+      }
+    }
+  }
+
+  &__slide {
+    height: 100%;
+    width: 89rem;
+    display: flex;
+  }
+
+  &__section {
+    position: relative;
+    height: 37rem;
+    width: 24rem;
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: $transition-primary;
+
+    &.activeSection {
+      height: 53rem;
+      width: 33rem;
+      z-index: 3;
+      box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+      transform: translateX(-0.5rem);
+
+      &::before {
+        content: "";
+        height: 53rem;
+        width: 33rem;
+        position: absolute;
+        left: 0;
+        top: 0;
+        background: linear-gradient(180deg, transparent, rgba(0, 0, 0, 0.8));
+        z-index: 5;
+      }
+
+      & > .homejumbotron__section--label {
+        position: absolute;
+        bottom: 9rem;
+        left: -12.5rem;
+        text-transform: uppercase;
+        text-align: center;
+        font-size: 6rem;
+        opacity: 1 !important;
+        width: 57rem;
+        transition: $transition-primary;
+        z-index: 6;
+
+        &.current {
+          opacity: 1;
+          transform: scale(1);
+        }
+
+        &.incurrent {
+          opacity: 0;
+          transform: scale(0);
+        }
+      }
+    }
+
+    &:not(:first-child) {
+      opacity: 0.8;
+      box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+
+      -webkit-filter: blur(0.4rem);
+      -moz-filter: blur(0.4rem);
+      -o-filter: blur(0.4rem);
+      -ms-filter: blur(0.4rem);
+      filter: blur(0.4rem);
+    }
+
+    &:not(:last-child) {
+      margin-right: 4rem;
+    }
+
+    &--img {
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 100%;
+      width: 100%;
+      overflow: hidden;
+      transition: $transition-primary;
+
+      &.current {
+        opacity: 1;
+      }
+
+      &.incurrent {
+        opacity: 0;
+      }
+    }
+
+    &--label {
+      opacity: 0;
+    }
+
+    &.aftercurrent {
+      transform: translateY(5rem);
+    }
+
+    &.right {
+      transform: translateY(5rem);
+    }
+
+    &--btnarea {
+      position: absolute;
+      bottom: 4.5rem;
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 33rem;
+      z-index: 6;
+
+      & button {
+        outline: none;
+        border: 1px solid #fff;
+        color: #fff;
+        background: transparent;
+        text-transform: uppercase;
+        font-size: 1.77rem;
+        height: 3.8rem;
+        width: 17rem;
+        text-align: center;
+        cursor: pointer;
+        text-decoration: underline;
+      }
+    }
+  }
+
+  &__navi {
+    position: absolute;
+    bottom: 2.5rem;
+    left: 0;
+    width: 100%;
+    height: 5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    & span {
+      display: inline-block;
+      cursor: pointer;
+
+      @include respond(tab-land) {
+        margin: 0 0.5rem;
+      }
+
+      &:nth-child(1) {
+        transform: rotate(180deg) translateY(0.3rem);
+      }
+    }
+  }
+
+  &__svg {
+    fill: #c4c4c4;
+    height: 4rem;
+    width: 4rem;
+
+    @include respond(tab-land) {
+      height: 6rem;
+      width: 6rem;
+    }
+  }
 
   @include respond(tab-land) {
     height: 79rem;
@@ -459,17 +652,6 @@ export default {
       &:nth-child(1) {
         transform: rotate(180deg) translateY(0.3rem);
       }
-    }
-  }
-
-  &__svg {
-    fill: #c4c4c4;
-    height: 4rem;
-    width: 4rem;
-
-    @include respond(tab-land) {
-      height: 6rem;
-      width: 6rem;
     }
   }
 }

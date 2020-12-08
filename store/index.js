@@ -16,7 +16,7 @@ const createStore = () => {
       current_content: null,
       current_route: "/",
       advertising_photos: [],
-      photography_photos: [],
+      portrait_photos: [],
       slide_items: [
         {
           id: 0,
@@ -60,19 +60,12 @@ const createStore = () => {
       setadvertisingPhotos(state, data) {
         state.advertising_photos = data;
       },
-      setphotographyPhotos(state, data) {
-        state.photography_photos = data;
+      setPortraitPhotos(state, data) {
+        state.portrait_photos = data;
       }
     },
     actions: {
       nuxtServerInit(vuexContext, context) {
-        vuexContext.commit("setCurrentContent", {
-          id: 0,
-          name: "photography",
-          photo:
-            "https://images.unsplash.com/photo-1587366802383-2e3e3e07aaf5?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=634&q=80"
-        });
-
         return (async function() {
           try {
             const advertising = await s3
@@ -89,7 +82,7 @@ const createStore = () => {
               })
               .promise();
 
-            vuexContext.commit("setphotographyPhotos", photography.Contents);
+            vuexContext.commit("setPortraitPhotos", photography.Contents);
             vuexContext.commit("setadvertisingPhotos", advertising.Contents);
           } catch (error) {
             console.log(error, "there is error");
@@ -116,8 +109,8 @@ const createStore = () => {
       advertising_items(state) {
         return state.advertising_photos;
       },
-      photography_items(state) {
-        return state.photography_photos;
+      portrait_items(state) {
+        return state.portrait_photos;
       }
     }
   });

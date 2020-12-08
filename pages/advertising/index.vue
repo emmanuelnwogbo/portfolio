@@ -10,7 +10,7 @@
           isActive: current > 0,
         }"
       >
-        {{ currentContent.name }}
+        advertising
       </h2>
       <div class="gallery__body--slide">
         <figure
@@ -29,6 +29,7 @@
           @click="set_current(item.id)"
         >
           <img
+            v-if="item.id <= limit"
             :src="`https://advertising-samson.s3.eu-west-2.amazonaws.com/${item.Key}`"
             alt=""
           />
@@ -61,7 +62,11 @@
           }"
           @click="set_current(item.id)"
         >
-          <img :src="`https://advertising-samson.s3.eu-west-2.amazonaws.com/${item.Key}`" alt="" />
+          <img
+            v-if="item.id <= limit"
+            :src="`https://advertising-samson.s3.eu-west-2.amazonaws.com/${item.Key}`"
+            alt=""
+          />
         </figure>
       </div>
       <div class="gallery__body--nav">
@@ -83,7 +88,6 @@
 <script>
 import HomeJumbotron from "@/components/HomeJumbotron";
 import Brands from "@/components/Brands";
-
 export default {
   components: {
     HomeJumbotron,
@@ -93,12 +97,13 @@ export default {
     return {
       opacity: true,
       current: 0,
+      limit: 7,
     };
   },
   mounted() {
     import("pure-swipe-js").then((result) => {
+      //console.log(result);
       const swiper = document.getElementById("gallery__body--mobile");
-
       swiper.addEventListener("swipe.end", (event) => {
         if (event.detail.direction % 2 !== 0) {
           this.current === this.slideItems.length - 1
@@ -111,6 +116,9 @@ export default {
     });
   },
   watch: {
+    current(new_val, old_val) {
+      new_val === this.limit - 2 ? (this.limit = this.limit + 5) : "";
+    },
     currentRoute(new_val, old_val) {
       this.opacity = false;
       setTimeout(() => {
@@ -128,21 +136,15 @@ export default {
       return current_route;
     },
     slideItems() {
-      let slide_items;
-      const current_content = this.$store.getters.current_content;
+      const slide_items = this.$store.getters.advertising_items;
 
-      if (current_content.name === "advertising") {
-        slide_items = this.$store.getters.advertising_items;
-      } else if (current_content.name === "photography") {
-        slide_items = this.$store.getters.photography_items;
-      }
-
-      const imgs = slide_items.filter((item) => item.Size !== 0);
-      imgs.forEach((item, index) => {
+      slide_items.forEach((item, index) => {
         item.id = index;
       });
 
-      return imgs;
+      const slide_data = slide_items.slice(0, this.limit);
+
+      return slide_items;
     },
   },
   methods: {
@@ -164,42 +166,36 @@ export default {
 
 <style lang="scss" scoped>
 .gallery {
+  overflow: hidden;
   margin-top: 8rem;
   color: #fff;
   padding: 0 2rem;
   animation: appear 0.7s ease-out;
-
   &__body {
     position: relative;
     display: flex;
     align-items: center;
     height: 70rem;
     transition: all 0.3s ease-in;
-
     @include respond(tab-land) {
       display: none;
     }
-
     &.visible {
       opacity: 1;
     }
-
     &.invisible {
       opacity: 0;
     }
-
     &--h2 {
       text-transform: uppercase;
       font-size: 7rem;
       flex-shrink: 0;
       transition: all 0.7s ease-out;
-
       &.isActive {
         transform: translateX(-55rem);
         opacity: 0;
       }
     }
-
     &--nav {
       position: absolute;
       bottom: 0;
@@ -209,33 +205,26 @@ export default {
       display: flex;
       align-items: center;
       justify-content: center;
-
       @include respond(tab-land) {
         bottom: -2rem;
       }
-
       & span {
         display: inline-block;
         cursor: pointer;
-
         @include respond(tab-land) {
           margin: 0 1rem;
         }
-
         &:nth-child(1) {
           transform: rotate(180deg) translateY(0.3rem);
         }
       }
     }
-
     &--slide {
       display: flex;
       align-items: center;
       position: relative;
       perspective: 150rem;
-
       width: 34rem;
-
       & figure {
         cursor: pointer;
         flex-shrink: 0;
@@ -245,85 +234,70 @@ export default {
         background: #000000;
         position: absolute;
         transition: all 0.7s ease-out;
-
         &.isLeft {
           left: -37rem;
           animation: slideLeft 0.7s ease-out;
         }
-
         &.isLeftTwo {
           transform: translateX(-37rem);
           animation: slideLeftTwo 0.7s ease-out;
         }
-
         &.isActive {
           height: 54rem;
           width: 41rem;
           animation: slideLeft 0.7s ease-out;
           left: 0;
         }
-
         &.isRight {
           right: -47rem;
           animation: slideRightInActive 0.7s ease-out;
         }
-
         &.isRightTwo {
           transform: translateX(37rem);
           animation: slideRight 0.7s ease-out;
         }
-
         &.isInActive {
           opacity: 0.8;
           box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-
           -webkit-filter: blur(0.4rem);
           -moz-filter: blur(0.4rem);
           -o-filter: blur(0.4rem);
           -ms-filter: blur(0.4rem);
           filter: blur(0.4rem);
         }
-
         &.invisible {
           opacity: 0;
           animation: invisible 0.7s ease-out;
         }
-
         &.clickable {
           z-index: 3;
         }
       }
     }
-
     &--svg {
       fill: #c4c4c4;
       height: 4rem;
       width: 4rem;
-
       @include respond(tab-land) {
         height: 6rem;
         width: 6rem;
       }
     }
-
     &--mobile {
       display: none;
       height: 75rem;
       position: relative;
       justify-content: center;
       align-items: center;
-
       @include respond(tab-land) {
         display: flex;
       }
     }
-
     &--mobilewrapper {
       position: relative;
       height: 58rem;
       flex-shrink: 0;
       width: 42rem;
-
       & figure {
         position: absolute;
         top: 0;
@@ -332,31 +306,22 @@ export default {
         height: 100%;
         z-index: 2;
         transition: all 0.3s ease-in;
-
-        & img {
-          object-fit: contain !important;
-        }
-
         &.clickable {
           z-index: 3;
         }
-
         &.inactive {
           opacity: 0.8;
           box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-
           -webkit-filter: blur(0.4rem);
           -moz-filter: blur(0.4rem);
           -o-filter: blur(0.4rem);
           -ms-filter: blur(0.4rem);
           filter: blur(0.4rem);
         }
-
         &.left {
           left: -40rem;
           transform: scale(0.8);
         }
-
         &.right {
           left: 40rem;
           transform: scale(0.8);
@@ -364,5 +329,9 @@ export default {
       }
     }
   }
+}
+
+img {
+  object-fit: contain !important;
 }
 </style>
