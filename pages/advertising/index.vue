@@ -29,6 +29,7 @@
           @click="set_current(item.id)"
         >
           <v-lazy-image
+            v-if="item.id <= limit"
             :src="`https://advertising-samson.s3.eu-west-2.amazonaws.com/${item.Key}`"
             src-placeholder="https://res.cloudinary.com/dnsj71rid/image/upload/c_scale,q_10,w_378/v1602546774/VI2A6028_pregqc.jpg"
           />
@@ -90,7 +91,7 @@ export default {
     HomeJumbotron,
     Brands,
     //"vue-load-image": null,
-    VLazyImage
+    VLazyImage,
   },
   data() {
     return {
@@ -246,10 +247,12 @@ export default {
           animation: slideLeftTwo 0.7s ease-out;
         }
         &.isActive {
-          height: 54rem;
-          width: 41rem;
+          //height: 54rem;
+          //width: 41rem;
           animation: slideLeft 0.7s ease-out;
-          left: 0;
+          //left: 0;
+          left: 5rem;
+          transform: scale(1.3);
         }
         &.isRight {
           right: -47rem;

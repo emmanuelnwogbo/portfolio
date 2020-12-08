@@ -49,12 +49,12 @@
 @keyframes slideLeft {
     0% {
         opacity: 0;
-        transform: translateX(40rem) translateY(4rem) rotateY(60deg);
+        transform: translateX(40rem) translateY(4rem) rotateY(60deg) scale(1);
     }
 
     100% {
         opacity: 1;
-        transform: translateY(0);
+        transform: translateY(0) scale(1.3);
     }
 }
 
