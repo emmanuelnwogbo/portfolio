@@ -1,0 +1,1 @@
+__NUXT_JSONP__("/potraitphotography", {data:[{}],fetch:[],mutations:[]});
