@@ -1,5 +1,10 @@
 <template>
-  <div class="header">
+  <div
+    class="header"
+    v-bind:class="{
+      lowerLeftPadding: current_route !== 'index',
+    }"
+  >
     <div class="header header__desktop">
       <div class="header__name" @click="go_home">
         <div>
@@ -39,6 +44,8 @@
 </template>
 
 <script>
+import homeJumbotron from "@/mixins/home_jumbotron.js";
+
 export default {
   name: "Header",
   data() {
@@ -48,7 +55,8 @@ export default {
   },
   methods: {
     go_home() {
-      this.$router.push('/')
+      this.$nuxt.$emit('home')
+      this.$router.push("/");
     },
     toggle_slider() {
       this.slider ? (this.slider = false) : (this.slider = true);
@@ -60,6 +68,12 @@ export default {
       this.slider = false;
     },
   },
+  computed: {
+    current_route() {
+      return this.$route.name;
+    },
+  },
+  mixins: [homeJumbotron],
 };
 </script>
 
@@ -76,12 +90,16 @@ export default {
   align-items: center;
   display: flex;
   justify-content: space-between;
-  padding: 0 7rem;
+  padding: 2rem 4rem 2rem 2rem;
   text-transform: uppercase;
   font-weight: 500;
   font-size: 1.8rem;
 
   opacity: 1 !important;
+
+  &.lowerLeftPadding {
+    padding: 2rem 2rem 2rem 2rem;
+  }
 
   @include respond(tab-land) {
     padding: 0 2rem;

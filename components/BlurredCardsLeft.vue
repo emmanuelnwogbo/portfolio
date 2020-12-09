@@ -44,12 +44,12 @@ export default {
   &__section {
     position: absolute;
     top: 0;
-    height: 37rem;
-    width: 24rem;
+    height: 41rem;
+    width: 29rem;
     cursor: pointer;
     flex-shrink: 0;
     transition: $transition-primary;
-    transform: translateY(5rem);
+    transform: translateY(9rem);
 
     opacity: 0.8;
     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
@@ -61,7 +61,7 @@ export default {
     filter: blur(0.4rem);
 
     &.left {
-      right: 94rem;
+      right: 109.5rem;
     }
 
     &.offscreen {

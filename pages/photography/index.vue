@@ -1,40 +1,61 @@
 <template>
   <div class="photography">
     <div
-      class="photography__section"
+      class="photography__section desktop"
       v-for="(item, index) in sections"
       :key="'sections' + index"
     >
       <figure>
-        <img :src="item.cover" alt="" />
+        <v-lazy-image
+          :src="item.photo"
+          src-placeholder="https://res.cloudinary.com/dnsj71rid/image/upload/c_scale,q_10,w_378/v1602546774/VI2A6028_pregqc.jpg"
+        />
       </figure>
       <h2 class="photography__section--header">{{ item.name }}</h2>
       <div class="photography__section--btn">
         <button class="photography__section--button">Browse</button>
       </div>
     </div>
+
+    <div class="photography__mobile mobile">
+      <SwipeBox
+        v-bind:boxes="sections"
+        v-bind:objectFit="'cover'"
+        v-bind:overlayed="true"
+        v-bind:overlaytext="true"
+        v-bind:photography="true"
+      />
+    </div>
   </div>
 </template>
 
 <script>
+import VLazyImage from "v-lazy-image";
 export default {
   name: "photography",
   data() {
     return {};
   },
+  components: {
+    VLazyImage,
+  },
   computed: {
     sections() {
       const current_route = this.$store.getters.portrait_items;
+      const slide_items = this.$store.getters.product_items.filter(
+        (item) => item.Key !== "productphotos/"
+      );
 
       const sections = [
         {
           name: "product photography",
-          cover:
-            "https://images.unsplash.com/photo-1535585209827-a15fcdbc4c2d?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80",
+          photo: `https://advertising-samson.s3.eu-west-2.amazonaws.com/${slide_items[0].Key}`,
+          route: "productphotography",
         },
         {
           name: "portrait photography",
-          cover: `https://advertising-samson.s3.eu-west-2.amazonaws.com/${current_route[2].Key}`,
+          photo: `https://advertising-samson.s3.eu-west-2.amazonaws.com/${current_route[1].Key}`,
+          route: "potraitphotography",
         },
       ];
 
@@ -50,6 +71,10 @@ export default {
   display: flex;
   justify-content: space-evenly;
   align-items: center;
+
+  &__mobile {
+    margin-top: 9rem;
+  }
 
   &__section {
     position: relative;

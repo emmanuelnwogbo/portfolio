@@ -1,7 +1,7 @@
 <template>
   <div class="gallery">
     <div
-      class="gallery__body"
+      class="gallery__body desktop"
       v-bind:class="{ visible: opacity, invisible: !opacity }"
     >
       <h2
@@ -12,7 +12,12 @@
       >
         advertising
       </h2>
-      <div class="gallery__body--slide">
+      <div
+        class="gallery__body--slide"
+        v-bind:class="{
+          moveLeft: current > 0,
+        }"
+      >
         <figure
           v-for="(item, index) in slideItems"
           :key="index"
@@ -30,12 +35,17 @@
         >
           <v-lazy-image
             v-if="item.id <= limit"
-            :src="`https://advertising-samson.s3.eu-west-2.amazonaws.com/${item.Key}`"
+            :src="item.photo"
             src-placeholder="https://res.cloudinary.com/dnsj71rid/image/upload/c_scale,q_10,w_378/v1602546774/VI2A6028_pregqc.jpg"
           />
         </figure>
       </div>
-      <div class="gallery__body--nav">
+      <div
+        class="gallery__body--nav"
+        v-bind:class="{
+          moveLeft: current < 1,
+        }"
+      >
         <span @click="toggle_section('left')">
           <svg class="gallery__body--svg">
             <use xlink:href="~assets/sprite.svg#icon-play_arrow" />
@@ -49,32 +59,13 @@
       </div>
     </div>
 
-    <div class="gallery__body--mobile" id="gallery__body--mobile">
-      <div class="gallery__body--mobilewrapper">
-        <figure
-          v-for="(item, index) in slideItems"
-          :key="'mobileslide' + index"
-          v-bind:class="{
-            left: item.id < current,
-            right: item.id > current,
-            inactive: item.id !== current,
-            clickable: item.id === current + 1 || item.id === current - 1,
-          }"
-          @click="set_current(item.id)"
-        ></figure>
-      </div>
-      <div class="gallery__body--nav">
-        <span @click="toggle_section('left')">
-          <svg class="gallery__body--svg">
-            <use xlink:href="~assets/sprite.svg#icon-play_arrow" />
-          </svg>
-        </span>
-        <span @click="toggle_section('right')">
-          <svg class="gallery__body--svg">
-            <use xlink:href="~assets/sprite.svg#icon-play_arrow" />
-          </svg>
-        </span>
-      </div>
+    <div class="mobile">
+      <SwipeBox
+        v-bind:boxes="slideItems"
+        v-bind:objectFit="'contain'"
+        v-bind:overlayed="false"
+        v-bind:overlaytext="false"
+      />
     </div>
   </div>
 </template>
@@ -84,13 +75,15 @@ import HomeJumbotron from "@/components/HomeJumbotron";
 import Brands from "@/components/Brands";
 
 import LazyImage from "@/components/LazyImage";
-//import VueLoadImage from "vue-load-image";
 import VLazyImage from "v-lazy-image";
+
+import SwipeBox from "@/components/mobile/SwipeBox";
+
 export default {
   components: {
     HomeJumbotron,
     Brands,
-    //"vue-load-image": null,
+    SwipeBox,
     VLazyImage,
   },
   data() {
@@ -99,25 +92,6 @@ export default {
       current: 0,
       limit: 7,
     };
-  },
-  mounted() {
-    import("vue-load-image").then((result) => {
-      console.log(result.default);
-    });
-
-    import("pure-swipe-js").then((result) => {
-      //console.log(result);
-      const swiper = document.getElementById("gallery__body--mobile");
-      swiper.addEventListener("swipe.end", (event) => {
-        if (event.detail.direction % 2 !== 0) {
-          this.current === this.slideItems.length - 1
-            ? ""
-            : (this.current = this.current + 1);
-        } else {
-          this.current === 0 ? "" : (this.current = this.current - 1);
-        }
-      });
-    });
   },
   watch: {
     current(new_val, old_val) {
@@ -144,6 +118,7 @@ export default {
 
       slide_items.forEach((item, index) => {
         item.id = index;
+        item.photo = `https://advertising-samson.s3.eu-west-2.amazonaws.com/${item.Key}`;
       });
 
       const slide_data = slide_items.slice(0, this.limit);
@@ -175,6 +150,11 @@ export default {
   color: #fff;
   padding: 0 2rem;
   animation: appear 0.7s ease-out;
+
+  @include respond(tab-land) {
+    padding: 2rem 0;
+  }
+
   &__body {
     position: relative;
     display: flex;
@@ -209,6 +189,16 @@ export default {
       display: flex;
       align-items: center;
       justify-content: center;
+      transform: $transition-primary;
+
+      &.moveLeft {
+        transform: translateX(-9rem);
+
+        @include respond(tab-land) {
+          transform: translateX(0);
+        }
+      }
+
       @include respond(tab-land) {
         bottom: -2rem;
       }
@@ -229,6 +219,11 @@ export default {
       position: relative;
       perspective: 150rem;
       width: 34rem;
+
+      &.moveLeft {
+        transform: translateX(7rem);
+      }
+
       & figure {
         cursor: pointer;
         flex-shrink: 0;
@@ -247,10 +242,7 @@ export default {
           animation: slideLeftTwo 0.7s ease-out;
         }
         &.isActive {
-          //height: 54rem;
-          //width: 41rem;
           animation: slideLeft 0.7s ease-out;
-          //left: 0;
           left: 5rem;
           transform: scale(1.3);
         }
@@ -285,53 +277,7 @@ export default {
       height: 4rem;
       width: 4rem;
       @include respond(tab-land) {
-        height: 6rem;
-        width: 6rem;
-      }
-    }
-    &--mobile {
-      display: none;
-      height: 75rem;
-      position: relative;
-      justify-content: center;
-      align-items: center;
-      @include respond(tab-land) {
-        display: flex;
-      }
-    }
-    &--mobilewrapper {
-      position: relative;
-      height: 58rem;
-      flex-shrink: 0;
-      width: 42rem;
-      & figure {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 42rem;
-        height: 100%;
-        z-index: 2;
-        transition: all 0.3s ease-in;
-        &.clickable {
-          z-index: 3;
-        }
-        &.inactive {
-          opacity: 0.8;
-          box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-          -webkit-filter: blur(0.4rem);
-          -moz-filter: blur(0.4rem);
-          -o-filter: blur(0.4rem);
-          -ms-filter: blur(0.4rem);
-          filter: blur(0.4rem);
-        }
-        &.left {
-          left: -40rem;
-          transform: scale(0.8);
-        }
-        &.right {
-          left: 40rem;
-          transform: scale(0.8);
-        }
+        display: none;
       }
     }
   }

@@ -1,0 +1,1 @@
+__NUXT_JSONP__("/productdesign", {data:[{}],fetch:[],mutations:[]});

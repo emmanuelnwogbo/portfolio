@@ -70,4 +70,18 @@ img {
 .v-lazy-image-loaded {
   filter: blur(0);
 }
+
+.desktop {
+  @include respond(tab-land) {
+    display: none !important;
+  }
+}
+
+.mobile {
+  display: none;
+
+  @include respond(tab-land) {
+    display: block !important;
+  }
+}
 </style>

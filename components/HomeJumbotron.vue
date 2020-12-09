@@ -1,6 +1,6 @@
 <template>
   <div class="homejumbotron">
-    <div class="homejumbotron__body">
+    <div class="homejumbotron__body desktop">
       <BlurredCardsLeft
         v-for="(item, index) in sections"
         :key="'isactiveleft' + index"
@@ -17,7 +17,7 @@
         <div class="homejumbotron__intro--img">
           <figure>
             <v-lazy-image
-              :src="'~assets/samson.png'"
+              :src="'https://advertising-samson.s3.eu-west-2.amazonaws.com/download+(10).png'"
               src-placeholder="https://res.cloudinary.com/dnsj71rid/image/upload/c_scale,q_10,w_378/v1602546774/VI2A6028_pregqc.jpg"
             />
           </figure>
@@ -91,6 +91,22 @@
         </span>
       </div>
     </div>
+
+    <div class="homejumbotron__mobile">
+      <MobileIntro />
+      <div
+        v-bind:style="{
+          opacity: slide_opacity,
+        }"
+      >
+        <SwipeBox
+          v-bind:boxes="sections"
+          v-bind:objectFit="'cover'"
+          v-bind:overlayed="true"
+          v-bind:overlaytext="true"
+        />
+      </div>
+    </div>
   </div>
 </template>
 
@@ -98,7 +114,6 @@
 import HomeCard from "@/components/HomeCard";
 import BlurredCards from "@/components/BlurredCards";
 import BlurredCardsLeft from "@/components/BlurredCardsLeft";
-import Intro from "@/components/Intro";
 
 import BlurredCardRight from "@/components/BlurredCardRight";
 
@@ -108,15 +123,13 @@ import MobileIntro from "@/components/mobile/MobileIntro";
 import MobileSlidePhoto from "@/components/mobile/MobileSlidePhoto";
 import StaticPhoto from "@/components/mobile/StaticPhoto";
 
-import { TimelineLite } from "gsap";
-
+import SwipeBox from "@/components/mobile/SwipeBox";
 import VLazyImage from "v-lazy-image";
 
 export default {
   name: "HomeJumbotron",
   components: {
     HomeCard,
-    Intro,
     BlurredCardRight,
     BlurredCardsLeft,
     BlurredCards,
@@ -124,91 +137,22 @@ export default {
     MobileSlidePhoto,
     StaticPhoto,
     VLazyImage,
+    SwipeBox,
   },
   data() {
     return {
-      timeline: new TimelineLite(),
       current_section: 0,
-      current_section_handler: 0,
-      loaded: false,
-      right_section: 1,
-      translates: {
-        translateA: 0,
-        translateB: 20,
-      },
-      mobileIntro: true,
+      slide_opacity: 0,
     };
   },
   mounted() {
-    this.loaded = true;
-
-    import("pure-swipe-js").then((result) => {
-      const swiper = document.getElementById("homejumbotron__mobile");
-
-      swiper.addEventListener("swipe.end", (event) => {
-        console.log(event);
-        if (event.detail.direction % 2 !== 0) {
-          this.current_section_handler === this.sections.length - 1
-            ? ""
-            : (this.current_section_handler = this.current_section_handler + 1);
-        } else {
-          this.current_section_handler === 0
-            ? (this.mobileIntro = true)
-            : (this.current_section_handler = this.current_section_handler - 1);
-        }
-      });
+    this.$nuxt.$on("home", () => {
+      this.current_section = 0;
     });
-  },
-  watch: {
-    current_section(new_val, old_val) {},
-    blurredCardData(new_val, old_val) {
-      setTimeout(() => {}, 1000);
-    },
-    current_section_handler(new_val, old_val) {
-      const { timeline } = this;
-      timeline.to(this.$data, {
-        duration: 0.5,
-        current_section: new_val,
-      });
-    },
-  },
-  computed: {
-    inActiveRight: {
-      get: function () {
-        const data = this.sections.filter(
-          (item) => item.id > this.current_section
-        );
 
-        return this.sections;
-      },
-    },
-    blurredCardData: {
-      get: function () {
-        const data = this.sections.filter(
-          (item) => item.id > this.current_section
-        );
-
-        return data;
-      },
-      set: function (newValue) {},
-    },
-    current_section_label: {
-      get: function () {
-        const label = this.sections[this.current_section_handler].name;
-        return label;
-      },
-      set: function (newValue) {},
-    },
-    blurredCardLeft: {
-      get: function () {
-        const data = this.sections.filter(
-          (item) => item.id < this.current_section
-        );
-
-        return data;
-      },
-      set: function (newValue) {},
-    },
+    this.$nuxt.$on("viewportf", () => {
+      this.slide_opacity = 1;
+    });
   },
   methods: {
     toggle_section(direction) {
@@ -221,21 +165,6 @@ export default {
         this.current_section = this.current_section - 1;
       }
     },
-    view() {
-      const { current_section } = this;
-      this.$store.dispatch("setRoute", "gallery");
-      this.$store.dispatch(
-        "setCurrentContentAction",
-        this.sections[current_section]
-      );
-    },
-    viewportfolio() {
-      this.mobileIntro = false;
-    },
-    click_current(val) {
-      this.current_section_handler = val;
-    },
-
     open_route(route_id) {
       const route = this.sections[route_id].route;
       this.$router.push("/" + route);
@@ -247,13 +176,22 @@ export default {
 
 <style lang="scss" scoped>
 .homejumbotron {
-  height: 68rem;
+  height: 69rem;
   background: #141414;
   margin-bottom: 1.5rem;
   margin-top: 8rem;
   padding: 2rem;
   color: #fff;
   padding-bottom: 0rem;
+
+  &__mobile {
+    height: 79rem;
+  }
+
+  @include respond(tab-land) {
+    padding: 2rem 0;
+    height: 69rem;
+  }
 
   &__body {
     position: relative;
@@ -264,7 +202,7 @@ export default {
 
   &__intro {
     position: relative;
-    width: 50rem;
+    width: 37rem;
     height: 95%;
     margin-top: 3rem;
     transition: $transition-primary;
@@ -295,7 +233,7 @@ export default {
     &--bio {
       font-size: 1.88rem;
       margin-top: 3rem;
-      width: 41rem;
+      width: 32rem;
     }
 
     &--btn {
@@ -318,8 +256,9 @@ export default {
 
   &__slide {
     height: 100%;
-    width: 89rem;
+    width: 105rem;
     display: flex;
+    transform: translateY(4rem);
   }
 
   &__section {
@@ -332,7 +271,7 @@ export default {
 
     &.activeSection {
       height: 53rem;
-      width: 33rem;
+      width: 40rem;
       z-index: 3;
       box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
       transform: translateX(-0.5rem);
@@ -340,7 +279,7 @@ export default {
       &::before {
         content: "";
         height: 53rem;
-        width: 33rem;
+        width: 40rem;
         position: absolute;
         left: 0;
         top: 0;
@@ -349,16 +288,16 @@ export default {
       }
 
       & > .homejumbotron__section--label {
+        transition: all 0.5s ease;
+        z-index: 6;
         position: absolute;
         bottom: 9rem;
-        left: -12.5rem;
+        left: -16.1rem;
         text-transform: uppercase;
         text-align: center;
-        font-size: 6rem;
+        font-size: 8rem;
         opacity: 1 !important;
-        width: 57rem;
-        transition: $transition-primary;
-        z-index: 6;
+        width: 71rem;
 
         &.current {
           opacity: 1;
@@ -424,7 +363,7 @@ export default {
       display: flex;
       justify-content: center;
       align-items: center;
-      width: 33rem;
+      width: 40rem;
       z-index: 6;
 
       & button {
@@ -447,7 +386,7 @@ export default {
     position: absolute;
     bottom: 2.5rem;
     left: 0;
-    width: 100%;
+    width: 100vw;
     height: 5rem;
     display: flex;
     justify-content: center;
@@ -478,10 +417,6 @@ export default {
     }
   }
 
-  @include respond(tab-land) {
-    height: 79rem;
-  }
-
   &__desktop {
     @include respond(tab-land) {
       display: none;
@@ -493,174 +428,7 @@ export default {
 
     @include respond(tab-land) {
       display: block;
-    }
-
-    &--portfolio {
-      position: absolute;
-      position: absolute;
-      top: 0;
-      left: 0;
-      height: 100%;
-      width: 100%;
-      background: #141414;
-    }
-  }
-
-  &__parent {
-    height: 73rem;
-  }
-
-  &.notshown {
-    opacity: 0;
-  }
-
-  &__homecards {
-    position: relative;
-    background: transparent;
-    height: 57rem;
-    width: 50rem;
-    position: relative;
-    transform: translateY(-4rem);
-    flex-shrink: 0;
-    overflow: hidden;
-  }
-
-  &__static {
-    height: 57rem;
-    width: 40rem;
-    position: absolute;
-    left: 5rem;
-    top: 0;
-    z-index: 3;
-
-    &::before {
-      content: "";
-      height: 57rem;
-      width: 40rem;
-      position: absolute;
-      left: 0;
-      top: 0;
-      background: linear-gradient(
-        to bottom,
-        rgba(0, 0, 0, 0),
-        rgba(0, 0, 0, 0.8)
-      );
-      z-index: 9;
-    }
-
-    & img {
-      position: absolute;
-      top: 0;
-      left: 0;
-      z-index: 1;
-      transition: all 1.5s;
-
-      &.isActive {
-        z-index: 8;
-      }
-    }
-  }
-
-  &__labels {
-    position: absolute;
-    width: 40rem;
-    transform: translateY(13rem);
-    left: 59rem;
-    text-align: center;
-    z-index: 9;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-
-    @include respond(tab-land) {
-      left: 7rem;
-      transform: translateY(49rem);
-    }
-
-    &.isActive {
-      transform: scale(1) translateY(13rem);
-      transition: all 0.4s ease-in;
-      opacity: 1;
-
-      @include respond(tab-land) {
-        left: 7rem;
-        transform: translateY(49rem);
-      }
-    }
-
-    &.isNotActive {
-      transform: scale(0) translateY(13rem);
-      transition: all 0.4s ease-in;
-      opacity: 0;
-
-      @include respond(tab-land) {
-        left: 7rem;
-        transform: translateY(49rem);
-      }
-    }
-
-    &--h2 {
-      width: 65rem;
-      text-transform: uppercase;
-      font-weight: 500;
-      font-size: 7rem;
-      flex-shrink: 0;
-
-      @include respond(tab-land) {
-        font-size: 5.7rem;
-      }
-    }
-
-    &--btn {
       position: relative;
-      color: #fff;
-      background: transparent;
-      border: 1px #fff solid;
-      text-align: center;
-      font-size: 1.7rem;
-      text-transform: uppercase;
-      padding: 1.2rem 4.5rem;
-      cursor: pointer;
-
-      &::before {
-        content: "";
-        height: 1px;
-        width: 7.5rem;
-        bottom: 1rem;
-        position: absolute;
-        left: 4.56rem;
-        background: #fff;
-      }
-    }
-  }
-
-  &__btn {
-    position: absolute;
-    bottom: 8rem;
-    left: 0;
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 1rem;
-    z-index: 9;
-
-    @include respond(tab-land) {
-      bottom: 1rem;
-    }
-
-    & span {
-      display: inline-block;
-      cursor: pointer;
-
-      @include respond(tab-land) {
-        margin: 0 0.5rem;
-      }
-
-      &:nth-child(1) {
-        transform: rotate(180deg) translateY(0.3rem);
-      }
     }
   }
 }

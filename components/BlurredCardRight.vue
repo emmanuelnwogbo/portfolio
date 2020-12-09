@@ -44,8 +44,8 @@ export default {
     current_section: Number,
   },
   components: {
-    VLazyImage
-  }
+    VLazyImage,
+  },
 };
 </script>
 
@@ -58,12 +58,12 @@ export default {
   &__section {
     position: absolute;
     right: 0;
-    height: 37rem;
-    width: 24rem;
+    height: 41rem;
+    width: 29rem;
     cursor: pointer;
     flex-shrink: 0;
     transition: $transition-primary;
-    transform: translateY(5rem);
+    transform: translateY(6rem);
 
     opacity: 0.8;
     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
@@ -80,7 +80,7 @@ export default {
     }
 
     &.aftercurrent {
-      right: 28rem;
+      right: 32.66rem;
     }
 
     &.right {

@@ -16,6 +16,7 @@
     "lqip-loader": "^2.2.1",
     "nuxt": "^2.14.0",
     "pure-swipe-js": "^1.0.0",
+    "swiper": "^6.4.0",
     "v-lazy-image": "^1.4.0",
     "vue-load-image": "^0.1.11",
     "webp-loader": "^0.6.0"

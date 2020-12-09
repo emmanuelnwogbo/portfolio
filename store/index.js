@@ -17,6 +17,7 @@ const createStore = () => {
       current_route: "/",
       advertising_photos: [],
       portrait_photos: [],
+      product_photos: [],
       slide_items: [
         {
           id: 0,
@@ -62,6 +63,9 @@ const createStore = () => {
       },
       setPortraitPhotos(state, data) {
         state.portrait_photos = data;
+      },
+      setProductPhotos(state, data) {
+        state.product_photos = data;
       }
     },
     actions: {
@@ -75,17 +79,25 @@ const createStore = () => {
               })
               .promise();
 
-            const photography = await s3
+            const portraits = await s3
               .listObjectsV2({
                 Bucket: "advertising-samson",
-                Prefix: "photography"
+                Prefix: "potraits"
               })
               .promise();
 
-            vuexContext.commit("setPortraitPhotos", photography.Contents);
+            const products = await s3
+              .listObjectsV2({
+                Bucket: "advertising-samson",
+                Prefix: "productphotos"
+              })
+              .promise();
+
+            vuexContext.commit("setProductPhotos", products.Contents);
             vuexContext.commit("setadvertisingPhotos", advertising.Contents);
+            vuexContext.commit("setPortraitPhotos", portraits.Contents);
           } catch (error) {
-            console.log(error, "there is error");
+            //console.log(error, "there is error");
           }
         })();
       },
@@ -111,6 +123,9 @@ const createStore = () => {
       },
       portrait_items(state) {
         return state.portrait_photos;
+      },
+      product_items(state) {
+        return state.product_photos;
       }
     }
   });
