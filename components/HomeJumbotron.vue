@@ -31,7 +31,7 @@
           </p>
         </div>
         <div class="homejumbotron__intro--btn">
-          <button>see resume</button>
+          <button @click="open_resume">see resume</button>
         </div>
       </div>
       <div class="homejumbotron__slide">

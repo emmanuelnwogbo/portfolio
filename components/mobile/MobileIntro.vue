@@ -21,7 +21,9 @@
       </p>
     </div>
     <div class="mobileintro__btn">
-      <button class="mobileintro__button">See resume</button>
+      <button class="mobileintro__button" @click="open_resume">
+        See resume
+      </button>
       <button class="mobileintro__button" @click="viewportfolio">
         View Portfolio
       </button>
@@ -52,7 +54,7 @@ export default {
   methods: {
     viewportfolio() {
       this.mobileIntro = false;
-      this.$nuxt.$emit('viewportf')
+      this.$nuxt.$emit("viewportf");
     },
   },
   mixins: [homeJumbotron],

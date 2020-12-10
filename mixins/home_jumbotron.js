@@ -32,5 +32,13 @@ export default {
         }
       ]
     };
+  },
+  methods: {
+    open_resume() {
+      window.open(
+        "https://advertising-samson.s3.eu-west-2.amazonaws.com/Samson+adebayo's+resume'.pdf",
+        "_blank"
+      );
+    }
   }
 };
