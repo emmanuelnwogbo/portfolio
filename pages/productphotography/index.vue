@@ -1,6 +1,14 @@
 <template>
   <div class="productphotos">
-    <div class="productphotos__mobile">
+    <div class="desktop hide-overflow">
+      <GlideBox
+        v-bind:boxes="slideItems"
+        v-bind:objectFit="'contain'"
+        v-bind:overlayed="false"
+        v-bind:overlaytext="false"
+      />
+    </div>
+    <div class="productphotos__mobile mobile">
       <SwipeBox
         v-bind:boxes="slideItems"
         v-bind:objectFit="'contain'"
@@ -13,17 +21,26 @@
 
 <script>
 import SwipeBox from "@/components/mobile/SwipeBox";
+import GlideBox from "@/components/GlideBox";
 export default {
+  components: {
+    SwipeBox,
+    GlideBox,
+  },
   computed: {
     slideItems() {
       const slide_items = this.$store.getters.product_items;
 
-      slide_items.forEach((item, index) => {
+      const sanitize = slide_items.filter(
+        (item) => item.Key !== "productphotos/"
+      );
+
+      sanitize.forEach((item, index) => {
         item.id = index;
         item.photo = `https://advertising-samson.s3.eu-west-2.amazonaws.com/${item.Key}`;
       });
 
-      return slide_items.filter((item) => item.Key !== "productphotos/");
+      return sanitize;
     },
   },
 };
@@ -33,5 +50,14 @@ export default {
 .productphotos {
   height: 100vh;
   margin-top: 8rem;
+
+  &__h2 {
+    position: absolute;
+    transform: translateY(25rem);
+    font-size: 5rem;
+    text-transform: uppercase;
+    transition: $transition-primary;
+    color: #fff;
+  }
 }
 </style>

@@ -84,4 +84,8 @@ img {
     display: block !important;
   }
 }
+
+.hide-overflow {
+  overflow: hidden !important;
+}
 </style>

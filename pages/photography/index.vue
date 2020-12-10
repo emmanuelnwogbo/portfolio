@@ -12,7 +12,7 @@
         />
       </figure>
       <h2 class="photography__section--header">{{ item.name }}</h2>
-      <div class="photography__section--btn">
+      <div class="photography__section--btn" @click="open_route(item.route)">
         <button class="photography__section--button">Browse</button>
       </div>
     </div>
@@ -60,6 +60,11 @@ export default {
       ];
 
       return sections;
+    },
+  },
+  methods: {
+    open_route(route) {
+      this.$router.push("/" + route);
     },
   },
 };
