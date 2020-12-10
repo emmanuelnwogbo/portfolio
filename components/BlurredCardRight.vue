@@ -23,7 +23,7 @@
       <figure class="blurredcardright__section--img">
         <v-lazy-image
           :src="section.photo"
-          src-placeholder="https://res.cloudinary.com/dnsj71rid/image/upload/c_scale,q_10,w_378/v1602546774/VI2A6028_pregqc.jpg"
+          src-placeholder="https://res.cloudinary.com/dnsj71rid/image/upload/v1607561853/gallery_1_j9dda0.gif"
         />
       </figure>
       <h2 class="blurredcardright__section--label">

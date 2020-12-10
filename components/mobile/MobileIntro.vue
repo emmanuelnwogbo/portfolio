@@ -9,7 +9,7 @@
     <figure class="mobileintro__img">
       <v-lazy-image
         :src="'https://advertising-samson.s3.eu-west-2.amazonaws.com/download+(10).png'"
-        src-placeholder="https://res.cloudinary.com/dnsj71rid/image/upload/c_scale,q_10,w_378/v1602546774/VI2A6028_pregqc.jpg"
+        src-placeholder="https://res.cloudinary.com/dnsj71rid/image/upload/v1607561853/gallery_1_j9dda0.gif"
       />
     </figure>
     <div class="mobileintro__bio">

@@ -43,7 +43,7 @@
           <figure v-if="!videos">
             <v-lazy-image
               :src="item.photo"
-              src-placeholder="https://res.cloudinary.com/dnsj71rid/image/upload/c_scale,q_10,w_378/v1602546774/VI2A6028_pregqc.jpg"
+              src-placeholder="https://res.cloudinary.com/dnsj71rid/image/upload/v1607561853/gallery_1_j9dda0.gif"
               alt=""
               v-bind:style="{
                 objectFit,
@@ -53,7 +53,7 @@
           <figure v-if="videos && !videovisible">
             <v-lazy-image
               :src="item.photo"
-              src-placeholder="https://res.cloudinary.com/dnsj71rid/image/upload/c_scale,q_10,w_378/v1602546774/VI2A6028_pregqc.jpg"
+              src-placeholder="https://res.cloudinary.com/dnsj71rid/image/upload/v1607561853/gallery_1_j9dda0.gif"
               alt=""
               v-bind:style="{
                 objectFit,
@@ -146,14 +146,13 @@ export default {
 
   &__label {
     position: absolute;
-    width: 66rem;
-    text-align: left;
-    top: 0;
+    width: 50rem;
+    text-align: center;
+    bottom: 12rem;
     color: #fff;
     text-transform: uppercase;
     z-index: 10;
-    font-size: 6.2rem;
-    transform: rotate(90deg) translateX(32rem) translateY(17.6rem);
+    font-size: 4.8rem;
 
     &.photography {
       font-size: 4.5rem;
