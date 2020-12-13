@@ -49,7 +49,7 @@ export default {
     },
   },
   mounted() {
-    console.log(this.$route.name);
+    console.log(process.env.NODE_ENV, 'canada');
   },
   computed: {
     currentContent() {

@@ -25,8 +25,6 @@ app.post("/", function(req, res) {
 
   const someInvalid = sanitizedAttributes.some(r => !r);
 
-  console.log(sanitizedAttributes, "values here");
-
   if (someInvalid) {
     return res.status(422).json({ error: "Ugh.. That looks unprocessable!" });
   }

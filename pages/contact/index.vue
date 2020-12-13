@@ -80,8 +80,14 @@ export default {
     sendMessage() {
       this.submitting = true;
 
+      const node_env = process.env.NODE_ENV;
+      const contact_url =
+        node_env === "development"
+          ? "http://localhost:3000"
+          : `${process.env.PROD_URL}`;
+
       axios
-        .post("http://localhost:3000/api/contact", {
+        .post(`${contact_url}/api/contact`, {
           name: this.name,
           email: this.email,
           msg: this.msg,
