@@ -1,5 +1,5 @@
 <template>
-  <div class="blurredcardright">
+  <div class="blurredcardright" @click="switchSection(section.id)">
     <div
       class="blurredcardright__section"
       v-bind:class="{
@@ -42,6 +42,7 @@ export default {
     section: Object,
     sections: Array,
     current_section: Number,
+    switchSection: Function
   },
   components: {
     VLazyImage,

@@ -58,6 +58,7 @@ export default {
 <style lang="scss" scoped>
 .cinematography {
   margin-top: 8rem;
+  animation: appear 0.7s ease-out;
   
   &__mobile {
     margin-top: 9rem;

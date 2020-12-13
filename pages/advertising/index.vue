@@ -48,9 +48,6 @@ export default {
       }, 400);
     },
   },
-  mounted() {
-    console.log(process.env.NODE_ENV, 'canada');
-  },
   computed: {
     currentContent() {
       const current_content = this.$store.getters.current_content;

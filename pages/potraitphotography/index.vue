@@ -50,5 +50,6 @@ export default {
 .portraitphotos {
   height: 100vh;
   margin-top: 8rem;
+  animation: appear 0.7s ease-out;
 }
 </style>

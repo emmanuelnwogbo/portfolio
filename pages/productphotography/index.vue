@@ -51,6 +51,7 @@ export default {
 .productphotos {
   height: 100vh;
   margin-top: 8rem;
+  animation: appear 0.7s ease-out;
 
   &__h2 {
     position: absolute;

@@ -4,6 +4,7 @@
       <BlurredCardsLeft
         v-for="(item, index) in sections"
         :key="'isactiveleft' + index"
+        v-bind:switchSection="switch_section"
         v-bind:section="item"
         v-bind:current_section="current_section"
         v-bind:sections="sections"
@@ -69,6 +70,7 @@
         <BlurredCardRight
           v-for="(item, index) in sections"
           :key="'isactiveright' + index"
+          v-bind:switchSection="switch_section"
           v-bind:section="item"
           v-bind:current_section="current_section"
           v-bind:sections="sections"
@@ -155,6 +157,9 @@ export default {
     });
   },
   methods: {
+    switch_section(section_id) {
+      this.current_section = section_id;
+    },
     toggle_section(direction) {
       if (
         direction === "right" &&

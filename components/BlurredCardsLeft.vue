@@ -1,6 +1,7 @@
 <template>
   <div
     class="blurredcardleft__section"
+    @click="switchSection(section.id)"
     v-bind:class="{
       left: section.id === current_section - 1,
       right: section.id === current_section || section.id > current_section,
@@ -28,6 +29,7 @@ export default {
     section: Object,
     sections: Array,
     current_section: Number,
+    switchSection: Function
   },
   components: {
     VLazyImage,

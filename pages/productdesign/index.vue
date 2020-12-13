@@ -4,12 +4,12 @@
 
 <script>
 export default {
-  name: "Product design",
+  name: "ProductDesign",
 };
 </script>
 
 <style lang="scss" scoped>
-.productdesign {
-    
+.productdesign { 
+  animation: appear 0.7s ease-out;
 }
 </style>
