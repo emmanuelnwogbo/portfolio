@@ -7,8 +7,6 @@ const s3 = new AWS.S3({
   Bucket: process.env.GALLERY_STORE
 });
 
-//https://advertising-samson.s3.eu-west-2.amazonaws.com/advertising/00d49673270561.5c0462e5beff3%20(1).jpg
-
 const createStore = () => {
   return new Vuex.Store({
     state: {
