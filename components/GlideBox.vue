@@ -277,18 +277,52 @@ export default {
 
     &.right {
       transform: translateY(4rem) translateX(38rem) scale(0.8);
+
+      opacity: 0.8;
+      box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+
+      -webkit-filter: blur(0.4rem);
+      -moz-filter: blur(0.4rem);
+      -o-filter: blur(0.4rem);
+      -ms-filter: blur(0.4rem);
+      filter: blur(0.4rem);
     }
 
     &.farright {
       transform: translateY(4rem) translateX(76rem) scale(0.8);
+      opacity: 0.8;
+      box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+
+      -webkit-filter: blur(0.4rem);
+      -moz-filter: blur(0.4rem);
+      -o-filter: blur(0.4rem);
+      -ms-filter: blur(0.4rem);
+      filter: blur(0.4rem);
     }
 
     &.left {
       transform: translateY(4rem) translateX(-38rem) scale(0.8);
+      opacity: 0.8;
+      box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+
+      -webkit-filter: blur(0.4rem);
+      -moz-filter: blur(0.4rem);
+      -o-filter: blur(0.4rem);
+      -ms-filter: blur(0.4rem);
+      filter: blur(0.4rem);
     }
 
     &.farleft {
       transform: translateY(4rem) translateX(-76rem) scale(0.8);
+
+      opacity: 0.8;
+      box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+
+      -webkit-filter: blur(0.4rem);
+      -moz-filter: blur(0.4rem);
+      -o-filter: blur(0.4rem);
+      -ms-filter: blur(0.4rem);
+      filter: blur(0.4rem);
     }
 
     &.visible {
