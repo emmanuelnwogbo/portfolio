@@ -84,7 +84,7 @@ export default {
       const contact_url =
         node_env === "development"
           ? "http://localhost:3000"
-          : `https://portfolio-silk-sigma.vercel.app`;
+          : process.env.PROD_URL;
 
       axios
         .post(`${contact_url}/api/contact`, {
