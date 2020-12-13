@@ -84,10 +84,10 @@ export default {
       const contact_url =
         node_env === "development"
           ? "http://localhost:3000"
-          : process.env.PROD_URL;
+          : "https://emailer-wbn62.ondigitalocean.app";
 
       axios
-        .post(`${contact_url}/api/contact`, {
+        .post(`${contact_url}/`, {
           name: this.name,
           email: this.email,
           msg: this.msg,
