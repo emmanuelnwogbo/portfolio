@@ -1,5 +1,24 @@
 <template>
   <div class="glidebox">
+    <div class="glidebox__h2">
+      <div class="glidebox__back" @click="go_back">
+        <span>
+          <svg>
+            <use xlink:href="~assets/sprite.svg#icon-keyboard_arrow_left" />
+          </svg>
+        </span>
+        <span>
+          <p>Back</p>
+        </span>
+      </div>
+      <h2
+        v-bind:class="{
+          invisible: current_item > 0,
+        }"
+      >
+        {{ header }}
+      </h2>
+    </div>
     <div
       class="glidebox__video"
       v-if="videos && video_viewable"
@@ -95,6 +114,7 @@ export default {
     overlaytext: Boolean,
     photography: Boolean,
     videos: Boolean,
+    header: String,
   },
   components: {
     VLazyImage,
@@ -119,6 +139,11 @@ export default {
     close_video() {
       this.video_viewable = false;
     },
+    go_back() {
+      const prev_route = this.$store.getters.prev_route.path;
+
+      this.$router.push(prev_route);
+    },
   },
 };
 </script>
@@ -128,6 +153,53 @@ export default {
   position: relative;
   width: 100vw;
   height: 82vh;
+
+  &__h2 {
+    position: absolute;
+    top: 0;
+    color: #fff;
+    font-size: 3rem;
+    height: 100%;
+    display: flex;
+    align-items: center;
+
+    & h2 {
+      transition: $transition-primary;
+      text-transform: uppercase;
+
+      &.invisible {
+        opacity: 0;
+        z-index: -1 !important;
+      }
+    }
+  }
+
+  &__back {
+    align-items: center;
+    display: flex;
+    position: absolute;
+    top: 0;
+    width: 11rem;
+    height: 5rem;
+    cursor: pointer;
+    font-size: 2.4rem;
+    z-index: 10;
+
+    & span {
+      display: inline-block;
+
+      &:nth-child(1) {
+        margin-right: 1rem;
+        transform: translateY(0.5rem);
+      }
+    }
+
+    & svg {
+      fill: #fff;
+      height: 4rem;
+      width: 4rem;
+    }
+  }
 
   &__video {
     display: flex;

@@ -1,5 +1,15 @@
 <template>
   <div class="photography">
+    <div class="photography__back desktop" @click="go_back">
+      <span>
+        <svg>
+          <use xlink:href="~assets/sprite.svg#icon-keyboard_arrow_left" />
+        </svg>
+      </span>
+      <span>
+        <p>Back</p>
+      </span>
+    </div>
     <div
       class="photography__section desktop"
       v-for="(item, index) in sections"
@@ -8,7 +18,7 @@
       <figure>
         <v-lazy-image
           :src="item.photo"
-          src-placeholder="https://res.cloudinary.com/dnsj71rid/image/upload/c_scale,q_10,w_378/v1602546774/VI2A6028_pregqc.jpg"
+          src-placeholder="https://res.cloudinary.com/dnsj71rid/image/upload/v1607561853/gallery_1_j9dda0.gif"
         />
       </figure>
       <h2 class="photography__section--header">{{ item.name }}</h2>
@@ -66,6 +76,9 @@ export default {
     open_route(route) {
       this.$router.push("/" + route);
     },
+    go_back() {
+      this.$router.push("/");
+    },
   },
 };
 </script>
@@ -76,6 +89,37 @@ export default {
   display: flex;
   justify-content: space-evenly;
   align-items: center;
+  margin-top: 8rem;
+  position: relative;
+
+  &__back {
+    align-items: center;
+    display: flex;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 11rem;
+    height: 5rem;
+    cursor: pointer;
+    font-size: 2.4rem;
+    z-index: 10;
+
+    & span {
+      display: inline-block;
+      color: #fff;
+
+      &:nth-child(1) {
+        margin-right: 1rem;
+        transform: translateY(0.5rem);
+      }
+    }
+
+    & svg {
+      fill: #fff;
+      height: 4rem;
+      width: 4rem;
+    }
+  }
 
   &__mobile {
     margin-top: 9rem;

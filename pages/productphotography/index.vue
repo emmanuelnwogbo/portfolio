@@ -6,6 +6,7 @@
         v-bind:objectFit="'contain'"
         v-bind:overlayed="false"
         v-bind:overlaytext="false"
+        v-bind:header="'Product Photography'"
       />
     </div>
     <div class="productphotos__mobile mobile">

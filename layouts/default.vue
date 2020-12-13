@@ -11,6 +11,11 @@ export default {
   components: {
     Header,
   },
+  watch: {
+    $route(to, from) {
+      this.$store.dispatch("setPrevRoute", from);
+    },
+  },
 };
 </script>
 

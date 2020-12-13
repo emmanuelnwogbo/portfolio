@@ -12,8 +12,25 @@
         </div>
       </div>
       <div class="header__menu">
-        <div class="header__menu--item">contact</div>
+        <div class="header__menu--item" @click="open_contact">contact</div>
         <div class="header__menu--item">socials</div>
+        <div class="header__socials">
+          <span>
+            <svg>
+              <use xlink:href="~assets/sprite.svg#icon-twitter" />
+            </svg>
+          </span>
+          <span>
+            <svg>
+              <use xlink:href="~assets/sprite.svg#icon-instagram" />
+            </svg>
+          </span>
+          <span>
+            <svg>
+              <use xlink:href="~assets/sprite.svg#icon-dribbble" />
+            </svg>
+          </span>
+        </div>
       </div>
     </div>
     <div class="header__mobile">
@@ -35,8 +52,24 @@
         @click.stop="toggle_slider"
       >
         <div class="header__mobile--slidebody">
-          <button @click.stop="open_contacts">contact</button>
-          <button @click.stop="open_port">socials</button>
+          <button @click.stop="open_contact">contact</button>
+          <div class="header__mobile--socials">
+            <span>
+              <svg>
+                <use xlink:href="~assets/sprite.svg#icon-twitter" />
+              </svg>
+            </span>
+            <span>
+              <svg>
+                <use xlink:href="~assets/sprite.svg#icon-instagram" />
+              </svg>
+            </span>
+            <span>
+              <svg>
+                <use xlink:href="~assets/sprite.svg#icon-dribbble" />
+              </svg>
+            </span>
+          </div>
         </div>
       </div>
     </div>
@@ -46,6 +79,8 @@
 <script>
 import homeJumbotron from "@/mixins/home_jumbotron.js";
 
+import axios from "axios";
+
 export default {
   name: "Header",
   data() {
@@ -53,19 +88,25 @@ export default {
       slider: false,
     };
   },
+  watch: {
+    $route(to, from) {
+      this.slider = false;
+    },
+  },
   methods: {
     go_home() {
-      this.$nuxt.$emit('home')
+      this.$nuxt.$emit("home");
       this.$router.push("/");
     },
     toggle_slider() {
       this.slider ? (this.slider = false) : (this.slider = true);
     },
-    open_contacts() {
-      this.slider = false;
-    },
     open_port() {
       this.slider = false;
+    },
+    open_contact() {
+      this.slider = false;
+      this.$router.push("/contact");
     },
   },
   computed: {
@@ -84,7 +125,7 @@ export default {
   height: 8rem;
   top: 0;
   width: 100vw;
-  z-index: 12;
+  z-index: 13;
   background: #000000;
   color: #fff;
   align-items: center;
@@ -96,6 +137,35 @@ export default {
   font-size: 1.8rem;
 
   opacity: 1 !important;
+
+  &__socials {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    width: 4rem;
+    bottom: -20rem;
+    right: 36px;
+    transition: $transition-primary;
+    opacity: 0;
+    z-index: -1;
+
+    &:hover {
+      z-index: 1;
+      opacity: 1;
+    }
+
+    & span {
+      display: inline-block;
+      margin-bottom: 3rem;
+      cursor: pointer;
+
+      & svg {
+        fill: #fff;
+        height: 3rem;
+        width: 3rem;
+      }
+    }
+  }
 
   &.lowerLeftPadding {
     padding: 2rem 2rem 2rem 2rem;
@@ -114,6 +184,21 @@ export default {
   &__mobile {
     display: none;
     width: 100%;
+
+    &--socials {
+      margin-top: 2rem;
+
+      & span {
+        display: inline-block;
+        margin-right: 2rem;
+
+        & svg {
+          fill: #fff;
+          height: 3rem;
+          width: 3rem;
+        }
+      }
+    }
 
     &--burger {
       z-index: 13;
@@ -154,6 +239,8 @@ export default {
       }
 
       &.invisible {
+        opacity: 0;
+        z-index: -1;
         display: none;
       }
     }
@@ -202,6 +289,15 @@ export default {
 
     &--item {
       cursor: pointer;
+
+      &:nth-child(2) {
+        &:hover {
+          & ~ .header__socials {
+            z-index: 1;
+            opacity: 1;
+          }
+        }
+      }
     }
   }
 }

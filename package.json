@@ -4,22 +4,28 @@
   "private": true,
   "scripts": {
     "dev": "nuxt",
-    "build": "nuxt build",
+    "build": "nuxt generate",
     "start": "nuxt start",
     "generate": "nuxt generate"
   },
   "dependencies": {
+    "@sendgrid/mail": "^7.4.0",
     "aws-sdk": "^2.803.0",
     "axios": "^0.21.0",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
     "gsap": "^3.5.1",
     "lozad": "^1.16.0",
     "lqip-loader": "^2.2.1",
+    "node-mailer": "^0.1.1",
     "nuxt": "^2.14.0",
     "pure-swipe-js": "^1.0.0",
     "swiper": "^6.4.0",
     "v-lazy-image": "^1.4.0",
+    "validator": "^13.5.2",
     "vue-load-image": "^0.1.11",
-    "webp-loader": "^0.6.0"
+    "webp-loader": "^0.6.0",
+    "xss-filters": "^1.2.7"
   },
   "devDependencies": {
     "@nuxtjs/style-resources": "^1.0.0",

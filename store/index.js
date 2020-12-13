@@ -1,11 +1,10 @@
 import Vuex from "vuex";
-import axios from "axios";
 import AWS from "aws-sdk";
 
 const s3 = new AWS.S3({
-  accessKeyId: "AKIAIORCABB4TP74HL2A",
-  secretAccessKey: "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",
-  Bucket: "advertising-samson"
+  accessKeyId: process.env.ACCESS_KEY_ID,
+  secretAccessKey: process.env.SECRET_ACCESS_KEY,
+  Bucket: process.env.GALLERY_STORE
 });
 
 //https://advertising-samson.s3.eu-west-2.amazonaws.com/advertising/00d49673270561.5c0462e5beff3%20(1).jpg
@@ -15,6 +14,7 @@ const createStore = () => {
     state: {
       current_content: null,
       current_route: "/",
+      prev_route: null,
       advertising_photos: [],
       portrait_photos: [],
       product_photos: [],
@@ -66,6 +66,9 @@ const createStore = () => {
       },
       setProductPhotos(state, data) {
         state.product_photos = data;
+      },
+      setPrevRoute(state, data) {
+        state.prev_route = data;
       }
     },
     actions: {
@@ -106,6 +109,9 @@ const createStore = () => {
       },
       setRoute(vuexContext, route_data) {
         vuexContext.commit("setRoute", route_data);
+      },
+      setPrevRoute(vuexContext, route_data) {
+        vuexContext.commit("setPrevRoute", route_data);
       }
     },
     getters: {
@@ -126,6 +132,9 @@ const createStore = () => {
       },
       product_items(state) {
         return state.product_photos;
+      },
+      prev_route(state) {
+        return state.prev_route;
       }
     }
   });

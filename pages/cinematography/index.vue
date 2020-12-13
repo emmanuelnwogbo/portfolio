@@ -7,6 +7,7 @@
         v-bind:overlayed="true"
         v-bind:overlaytext="false"
         v-bind:videos="true"
+        v-bind:header="'Cinematography'"
       />
     </div>
     <div class="cinematography__mobile mobile">
@@ -37,7 +38,7 @@ export default {
         {
           id: 0,
           photo:
-            "https://images.unsplash.com/photo-1493094614670-f6784185cde0?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1039&q=80",
+            "https://res.cloudinary.com/dnsj71rid/image/upload/q_72/v1607802888/Screenshot_129_usp4uw.png",
           embed: "https://www.youtube.com/embed/cP_OvM48p08?autoplay=1",
         },
         {
@@ -56,6 +57,8 @@ export default {
 
 <style lang="scss" scoped>
 .cinematography {
+  margin-top: 8rem;
+  
   &__mobile {
     margin-top: 9rem;
   }

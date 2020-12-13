@@ -6,6 +6,7 @@
         v-bind:objectFit="'contain'"
         v-bind:overlayed="false"
         v-bind:overlaytext="false"
+        v-bind:header="'Advertising'"
       />
     </div>
 
@@ -96,15 +97,6 @@ export default {
 
   padding: 0 2rem;
   animation: appear 0.7s ease-out;
-
-  &__h2 {
-    position: absolute;
-    transform: translateY(25rem);
-    font-size: 5rem;
-    text-transform: uppercase;
-    transition: $transition-primary;
-    color: #fff;
-  }
 
   @include respond(tab-land) {
     padding: 2rem 0;
